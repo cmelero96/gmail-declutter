@@ -25,7 +25,7 @@ declare -A sizes=(
 
 # Resize the image for each size
 for size in "${!sizes[@]}"; do
-    output_file="${sizes[$size]}"
+    output_file="src/${sizes[$size]}"
     echo "Creating $output_file with size ${size}x${size}..."
     magick "$INPUT_FILE" -resize "${size}x${size}" "$output_file"
 done
