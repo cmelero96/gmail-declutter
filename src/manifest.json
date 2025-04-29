@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Hide Gmail Message Previews",
   "version": "1.0",
-  "description": "Hides the preview of Gmail email contents, so that only sender, subject and date are visible. This reduces visual noise to keep your mind clearer while going through your mail.",
+  "description": "Hides the preview of Gmail email contents so that only the sender, subject and date are visible. This reduces visual noise to keep your mind clearer while going through your mail.",
   "permissions": ["storage"],
   "host_permissions": ["https://mail.google.com/*"],
   "action": {
