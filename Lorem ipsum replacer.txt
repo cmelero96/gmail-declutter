@@ -7,7 +7,9 @@ Labels: "table[id] tr td[id][role='gridcell'] div[title] > div > div"
 
 
 
-
+const escapeHTMLPolicy = trustedTypes.createPolicy("forceInner", {
+    createHTML: (to_escape) => to_escape
+})
 
 
 "table[id] tr td span:not([title]) > span[email], table[id] tr td[id][role='gridcell'] span > span, table[id] tr td[id][role='gridcell'] div[title] > div > div"
