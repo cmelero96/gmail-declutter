@@ -1,13 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const checkbox = document.getElementById('toggleCheckbox');
+  const previews = document.getElementById('previewsCheckbox');
+  const important = document.getElementById('importantCheckbox');
 
   // Load the previous setting (defaulting to true)
-  chrome.storage.sync.get({ hidePreview: true }, ({ hidePreview }) => {
-    checkbox.checked = hidePreview;
+  chrome.storage.sync.get({ hidePreview: true, hideImportant: true }, ({ hidePreview, hideImportant }) => {
+    previews.checked = hidePreview;
+    important.checked = hideImportant;
   });
 
   // When user toggles, save setting
-  checkbox.addEventListener('change', () => {
-    chrome.storage.sync.set({ hidePreview: checkbox.checked });
+  previews.addEventListener('change', () => {
+    chrome.storage.sync.set({ hidePreview: previews.checked });
+  });
+  important.addEventListener('change', () => {
+    chrome.storage.sync.set({ hideImportant: important.checked });
   });
 });

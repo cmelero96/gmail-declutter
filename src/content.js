@@ -1,29 +1,37 @@
 (function() {
-  const selector = "table[id] tr td[id][role='gridcell'] div + span[id]";
-  let hide = true;
+  const messagePreviewsSelector = "table[id] tr td[id][role='gridcell'] div + span[id]";
+  const importantIconsSelector = "table[id] tr > td > span[id][role='button']";
+  let hideMessagePreviews = true;
+  let hideImportantIcons = true;
 
-  // Apply or remove the `display:none` on every matching element
-  function apply() {
+  function updateView(hidePreview, hideImportant) {
+    hideMessagePreviews = hidePreview ?? hideMessagePreviews;
+    hideImportantIcons = hideImportant ?? hideImportantIcons;
+    applySettings();
+  }
+
+  function applySettings() {
+    toggleElements(messagePreviewsSelector, hideMessagePreviews);
+    toggleElements(importantIconsSelector, hideImportantIcons);
+  }
+
+  function toggleElements(selector, shouldHide) {
     document.querySelectorAll(selector).forEach(el => {
-      el.style.display = hide ? 'none' : '';
+      el.style.display = shouldHide ? 'none' : '';
     });
   }
 
   // Initial state load
-  chrome.storage.sync.get({ hidePreview: true }, ({ hidePreview }) => {
-    hide = hidePreview;
-    apply();
-  });
+  chrome.storage.sync.get({ hidePreview: true, hideImportant: true }, ({ hidePreview, hideImportant }) => updateView(hidePreview, hideImportant));
 
   // Re-apply whenever Gmail injects new nodes
-  const observer = new MutationObserver(apply);
+  const observer = new MutationObserver(applySettings);
   observer.observe(document.body, { childList: true, subtree: true });
 
   // Listen for changes from the popup
   chrome.storage.onChanged.addListener((changes, area) => {
-    if (area === 'sync' && changes.hidePreview) {
-      hide = changes.hidePreview.newValue;
-      apply();
+    if (area === 'sync') {
+      updateView(changes.hidePreview?.newValue, changes.hideImportant?.newValue)
     }
   });
 })();
