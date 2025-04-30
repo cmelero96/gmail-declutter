@@ -1,3 +1,11 @@
-# Hide Gmail Message Previews (Chrome extension)
+# Gmail declutter (Chrome extension)
 
-Hides the preview of Gmail email contents so that only the sender, subject, and date are visible. This reduces visual noise and keeps your mind clearer while you are going through your mail.
+Removes clutter from Gmail. Configurable so it only hides the elements that annoy you. Currently supports:
+
+- Remove email previews from the inbox
+- Remove "important" icon from the inbox
+
+Upcoming:
+- Remove "attachment" icon from the inbox
+- Remove "X new" from the tabs (Promotions, Social, etc)
+- Remove bold font and "X new" from the email categories in the left pane
