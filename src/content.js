@@ -1,6 +1,6 @@
 (function() {
   const messagePreviewsSelector = "table[id] tr td[id][role='gridcell'] div + span[id]";
-  const importantIconsSelector = "table[id] tr > td > span[id][role='button']";
+  const importantIconsSelector = "table[id] tr > td[jsaction] > div";
   let hideMessagePreviews = true;
   let hideImportantIcons = true;
 
