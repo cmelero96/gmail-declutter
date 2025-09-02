@@ -8,7 +8,8 @@
 
   function setupSearchShortcut() {
     const searchForm = document.querySelector(searchFormSelector);
-    if (!searchForm) return;
+    const searchInput = searchForm.querySelector('input:not([disabled])');
+    if (!searchForm || !searchInput) return;
     
     searchForm.style.position = 'relative';
     
@@ -16,9 +17,11 @@
     const button = document.createElement('button');
     button.className = 'main-unread-shortcut-button';
     button.style.position = 'absolute';
-    button.style.inset = '0 auto 0 100%';
-    button.style.display = 'flex';
-    button.style.alignItems = 'center';
+    button.style.inset = '8px auto auto 100%';
+
+    function updateButtonVisibility() {
+      button.style.visibility = searchInput.value.trim() !== mainUnreadQuery ? 'visible' : 'hidden';
+    }
     
     // Create span inside button
     const span = document.createElement('span');
@@ -28,6 +31,7 @@
     span.style.lineHeight = 'initial';
     span.style.padding = '8px 4px 4px 4px';
     span.textContent = 'Main unread emails';
+    updateButtonVisibility();
     button.appendChild(span);
     
     // Add hover effect to span
@@ -40,13 +44,14 @@
     
     // Trigger search when button is clicked
     button.addEventListener('click', () => {
-      const searchInput = searchForm.querySelector('input:not([disabled])');
-      if (searchInput) {
+        button.style.visibility = 'hidden';
         searchInput.value = mainUnreadQuery;
         searchInput.focus();
         searchInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter', keyCode: 13, which: 13 }));
-      }
     });
+    
+    // Add change listener to search input to show button again
+    searchInput.addEventListener('input', updateButtonVisibility);
     
     searchForm.appendChild(button);
   }
