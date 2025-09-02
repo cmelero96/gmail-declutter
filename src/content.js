@@ -12,6 +12,7 @@
     
     searchForm.style.position = 'relative';
     
+    // Create button
     const button = document.createElement('button');
     button.className = 'main-unread-shortcut-button';
     button.style.position = 'absolute';
@@ -19,10 +20,30 @@
     button.style.display = 'flex';
     button.style.alignItems = 'center';
     
+    // Create span inside button
+    const span = document.createElement('span');
+    span.style.borderRadius = '16px';
+    span.style.display = 'inline-flex';
+    span.style.height = '24px';
+    span.style.lineHeight = 'initial';
+    span.style.padding = '8px 4px 4px 4px';
+    span.textContent = 'Main unread emails';
+    button.appendChild(span);
+    
+    // Add hover effect to span
+    button.addEventListener('mouseenter', () => {
+      span.style.backgroundColor = 'rgba(120,120,120,0.1)';
+    });
+    button.addEventListener('mouseleave', () => {
+      span.style.backgroundColor = '';
+    });
+    
+    // Trigger search when button is clicked
     button.addEventListener('click', () => {
-      const searchInput = document.querySelector('input:not([disabled])');
+      const searchInput = searchForm.querySelector('input:not([disabled])');
       if (searchInput) {
         searchInput.value = mainUnreadQuery;
+        searchInput.focus();
         searchInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter', keyCode: 13, which: 13 }));
       }
     });
