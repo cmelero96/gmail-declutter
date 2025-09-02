@@ -8,52 +8,64 @@
 
   function setupSearchShortcut() {
     const searchForm = document.querySelector(searchFormSelector);
+    if (!searchForm) return;
     const searchInput = searchForm.querySelector('input:not([disabled])');
-    if (!searchForm || !searchInput) return;
+    if (!searchInput) return;
     
     searchForm.style.position = 'relative';
     
-    // Create button
-    const button = document.createElement('button');
-    button.className = 'main-unread-shortcut-button';
-    button.style.position = 'absolute';
-    button.style.inset = '8px auto auto 100%';
+    // Check if button already exists
+    let button = document.getElementById('main-unread-shortcut-button');
+    let span = document.getElementById('main-unread-shortcut-span');
+    
+    if (!button) {
+      // Create button only if it doesn't exist
+      button = document.createElement('button');
+      button.id = 'main-unread-shortcut-button';
+      button.style.position = 'absolute';
+      button.style.inset = '8px auto auto 100%';
+      
+      // Create span inside button
+      span = document.createElement('span');
+      span.id = 'main-unread-shortcut-span';
+      span.style.borderRadius = '16px';
+      span.style.display = 'inline-flex';
+      span.style.height = '24px';
+      span.style.lineHeight = 'initial';
+      span.style.padding = '8px 4px 4px 4px';
+      span.textContent = 'Main unread emails';
+      button.appendChild(span);
+      
+      // Add hover effect to span
+      button.addEventListener('mouseenter', () => {
+        span.style.backgroundColor = 'rgba(120,120,120,0.1)';
+      });
+      button.addEventListener('mouseleave', () => {
+        span.style.backgroundColor = '';
+      });
+      
+      // Trigger search when button is clicked
+      button.addEventListener('click', () => {
+          button.style.visibility = 'hidden';
+          searchInput.value = mainUnreadQuery;
+          searchInput.focus();
+          searchInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter', keyCode: 13, which: 13 }));
+      });
+      
+      searchForm.appendChild(button);
+    }
 
     function updateButtonVisibility() {
       button.style.visibility = searchInput.value.trim() !== mainUnreadQuery ? 'visible' : 'hidden';
     }
     
-    // Create span inside button
-    const span = document.createElement('span');
-    span.style.borderRadius = '16px';
-    span.style.display = 'inline-flex';
-    span.style.height = '24px';
-    span.style.lineHeight = 'initial';
-    span.style.padding = '8px 4px 4px 4px';
-    span.textContent = 'Main unread emails';
+    // Update button visibility and add input listener
     updateButtonVisibility();
-    button.appendChild(span);
     
-    // Add hover effect to span
-    button.addEventListener('mouseenter', () => {
-      span.style.backgroundColor = 'rgba(120,120,120,0.1)';
-    });
-    button.addEventListener('mouseleave', () => {
-      span.style.backgroundColor = '';
-    });
-    
-    // Trigger search when button is clicked
-    button.addEventListener('click', () => {
-        button.style.visibility = 'hidden';
-        searchInput.value = mainUnreadQuery;
-        searchInput.focus();
-        searchInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter', keyCode: 13, which: 13 }));
-    });
-    
+    // Remove existing input listener to avoid duplicates
+    searchInput.removeEventListener('input', updateButtonVisibility);
     // Add change listener to search input to show button again
     searchInput.addEventListener('input', updateButtonVisibility);
-    
-    searchForm.appendChild(button);
   }
 
   function updateView(hidePreview, hideImportant) {
