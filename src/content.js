@@ -8,11 +8,19 @@
 
   function setupSearchShortcut() {
     const searchForm = document.querySelector(searchFormSelector);
-    if (!searchForm) return;
+    if (!searchForm || !searchForm.parentElement) {
+      console.error("Gmail Declutter Error - Search form not found");
+      return;
+    }
     const searchInput = searchForm.querySelector('input:not([disabled])');
-    if (!searchInput) return;
+    if (!searchInput)  {
+      console.error("Gmail Declutter Error - Search input not found");
+      return;
+    };
     
-    searchForm.style.position = 'relative';
+    searchForm.parentElement.style.display = 'flex';
+    searchForm.parentElement.style.columnGap = '8px';
+    searchForm.style.flexGrow = '1';
     
     // Check if button already exists
     let button = document.getElementById('main-unread-shortcut-button');
@@ -22,26 +30,31 @@
       // Create button only if it doesn't exist
       button = document.createElement('button');
       button.id = 'main-unread-shortcut-button';
-      button.style.position = 'absolute';
-      button.style.inset = '8px auto auto 100%';
-      
+      button.style.borderRadius = '20px';
+      button.style.borderWidth = '0';
+      button.style.outline = '1px solid lightgrey';
+      button.style.background = 'white';
+      button.style.boxShadow = '0px 2px 6px -4px darkslategrey';
+      button.style.height = '36px';
+      button.style.cursor = 'pointer';
+      button.style.display = 'flex';
+      button.style.alignItems = 'center';
+      button.style.justifyContent = 'center';
+      button.style.padding = '0 8px';
+      button.style.alignSelf = 'center';
+
       // Create span inside button
       span = document.createElement('span');
       span.id = 'main-unread-shortcut-span';
-      span.style.borderRadius = '16px';
-      span.style.display = 'inline-flex';
-      span.style.height = '24px';
-      span.style.lineHeight = 'initial';
-      span.style.padding = '8px 4px 4px 4px';
       span.textContent = 'Main unread emails';
       button.appendChild(span);
       
-      // Add hover effect to span
+      // Add hover effect to button
       button.addEventListener('mouseenter', () => {
-        span.style.backgroundColor = 'rgba(120,120,120,0.1)';
+        button.style.backgroundColor = 'lightgrey';
       });
       button.addEventListener('mouseleave', () => {
-        span.style.backgroundColor = '';
+        button.style.backgroundColor = 'white';
       });
       
       // Trigger search when button is clicked
@@ -52,7 +65,7 @@
           searchInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter', keyCode: 13, which: 13 }));
       });
       
-      searchForm.appendChild(button);
+      searchForm.parentElement.appendChild(button);
     }
 
     function updateButtonVisibility() {

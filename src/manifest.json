@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Gmail declutter",
-  "version": "1.3",
+  "version": "1.4",
   "description": "Removes clutter from Gmail.",
   "permissions": ["storage"],
   "host_permissions": ["https://mail.google.com/*"],
